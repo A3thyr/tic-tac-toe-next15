@@ -1,10 +1,11 @@
 import { prisma } from "@/shared/lib/db";
-import { Game, User } from "@prisma/client";
+import { Game, Prisma, User } from "@prisma/client";
 import { z } from "zod";
 import { GameEntity, GameIdleEntity, GameOverEntity } from "../domain";
 
-async function gamesList(): Promise<GameEntity[]> {
+async function gamesList(where?: Prisma.GameWhereInput): Promise<GameEntity[]> {
   const games = prisma.game.findMany({
+    where,
     include: {
       winner: true,
       players: true,
@@ -24,9 +25,11 @@ function dbGameToGameEntity(
 ): GameEntity {
   switch (game.status) {
     case "idle": {
+      const [creator] = game.players;
+      if (!creator) throw new Error("Creator should be in the game idle");
       return {
         id: game.id,
-        players: game.players,
+        creator: creator,
         status: game.status,
       } satisfies GameIdleEntity;
     }
