@@ -1,16 +1,16 @@
 "use server";
 
 import { createGame } from "@/entities/game/server";
-import { prisma } from "@/shared/lib/db";
+import { getCurrentUser } from "@/entities/user/server";
 import { left } from "@/shared/lib/either";
 import { redirect } from "next/navigation";
 
 export const createGameAction = async () => {
-  const mockUser = await prisma.user.findFirst();
+  const user = await getCurrentUser();
 
-  if (!mockUser) return left("user-not-found" as const);
+  if (!user) return left("user-not-found" as const);
 
-  const gameResult = await createGame(mockUser);
+  const gameResult = await createGame(user);
 
   if (gameResult.type === "right") redirect(`/game/${gameResult.value.id}`);
 
