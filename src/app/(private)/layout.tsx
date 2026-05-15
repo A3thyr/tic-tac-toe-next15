@@ -11,9 +11,9 @@ export default async function PrivateLayout({
   const { session } = await sessionService.verifySession();
 
   return (
-    <div className="">
+    <div className="flex grow flex-col">
       <header className="border-b-primary/50 flex flex-row items-center justify-between gap-4 border-b px-10 py-4">
-        <div className="text-lg">Tik Tac Toe</div>
+        <div className="text-lg">Tic Tac Toe</div>
         <div className="flex items-center gap-4">
           <div className="text-lg">{session.login}</div>
           <form
