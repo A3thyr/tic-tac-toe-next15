@@ -7,5 +7,6 @@ export type {
   GameInProgressEntity,
   GameOverDrawEntity,
   GameOverEntity,
-  GameSymbol,
+  GameSymbolS,
 } from "./domain";
+export { getGameCurrentStep, getNextSymbol, GameSymbol } from "./domain";

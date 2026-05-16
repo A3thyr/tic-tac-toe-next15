@@ -1,4 +1,4 @@
-import { GameEntity } from "@/entities/game";
+import { GameEntity, getGameCurrentStep } from "@/entities/game";
 
 export function GameStatus({ game }: { game: GameEntity }) {
   switch (game.status) {
@@ -10,9 +10,15 @@ export function GameStatus({ game }: { game: GameEntity }) {
         </div>
       );
     }
-    case "inProgress":
-    case "gameOver":
+    case "inProgress": {
+      const currentSymbol = getGameCurrentStep(game);
+      return <div className="text-lg">Ход: {currentSymbol}</div>;
+    }
+    case "gameOver": {
+      const currentSymbol = getGameCurrentStep(game);
+      return <div className="text-lg">Победитель: {currentSymbol}</div>;
+    }
     case "gameOverDraw":
-      return <div className="">TODO</div>;
+      return <div className="text-lg">Ничья</div>;
   }
 }

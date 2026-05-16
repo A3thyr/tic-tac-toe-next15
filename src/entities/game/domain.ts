@@ -42,4 +42,25 @@ export type PlayerEntity = {
 
 export type Field = Cell[];
 export type Cell = string | null;
-export type GameSymbol = string;
+export type GameSymbolS = string;
+
+export const GameSymbol = {
+  X: "X",
+  O: "O",
+};
+
+export const getGameCurrentStep = (
+  game: GameInProgressEntity | GameOverEntity | GameOverDrawEntity,
+) => {
+  const symbols = game.field.filter((e) => e !== null).length;
+
+  return symbols % 2 === 0 ? GameSymbol.X : GameSymbol.O;
+};
+
+export const getNextSymbol = (gameSymbol: GameSymbolS) => {
+  if (gameSymbol === GameSymbol.X) {
+    return GameSymbol.O;
+  }
+
+  return GameSymbol.X;
+};
