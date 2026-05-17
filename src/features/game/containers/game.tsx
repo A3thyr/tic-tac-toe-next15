@@ -2,6 +2,7 @@ import { GameId } from "@/kernel/ids";
 import { GameLayout } from "../ui/layout";
 import { GamePlayers } from "../ui/players";
 import { GameEntity } from "@/entities/game";
+import { GameStatus } from "../ui/status";
 
 export function Game({ gameId }: { gameId: GameId }) {
   const game: GameEntity = {
@@ -13,5 +14,10 @@ export function Game({ gameId }: { gameId: GameId }) {
     },
     status: "idle",
   };
-  return <GameLayout players={<GamePlayers game={game} />} />;
+  return (
+    <GameLayout
+      players={<GamePlayers game={game} />}
+      status={<GameStatus game={game} />}
+    />
+  );
 }
