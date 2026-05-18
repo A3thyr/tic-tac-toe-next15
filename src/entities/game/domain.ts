@@ -9,6 +9,7 @@ export type GameEntity =
 export type GameIdleEntity = {
   id: GameId;
   creator: PlayerEntity;
+  field: Field;
   status: "idle";
 };
 

@@ -1,15 +1,15 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader } from "@/shared/ui/card";
 
 export function GameLayout({
   players,
   status,
-  actions,
+  // actions,
   field,
 }: {
   players?: React.ReactNode;
   status?: React.ReactNode;
   field?: React.ReactNode;
-  actions?: React.ReactNode;
+  // actions?: React.ReactNode;
 }) {
   return (
     <Card>
@@ -17,9 +17,9 @@ export function GameLayout({
       <CardContent className="flex flex-col gap-4">
         {players}
         {status}
-        {field}
+        <div className="flex items-center justify-center">{field}</div>
       </CardContent>
-      <CardFooter>{actions}</CardFooter>
+      {/* <CardFooter>{actions}</CardFooter> */}
     </Card>
   );
 }
