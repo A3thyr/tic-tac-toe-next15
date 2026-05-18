@@ -1,24 +1,27 @@
-"use client";
-
 import { GameId } from "@/kernel/ids";
-import { useGame } from "../model/use-game";
-import { GameField } from "../ui/field";
-import { GameLayout } from "../ui/layout";
-import { GamePlayers } from "../ui/players";
-import { GameStatus } from "../ui/status";
+import { GameClient } from "./game-client";
+import { getCurrentUser } from "@/entities/user/server";
+import { getGameById, startGame } from "@/entities/game/server";
+import { gameEvents } from "../services/game-events";
+import { redirect } from "next/navigation";
 
-export function Game({ gameId }: { gameId: GameId }) {
-  const { game, isPending } = useGame(gameId);
+export async function Game({ gameId }: { gameId: GameId }) {
+  const user = await getCurrentUser();
 
-  if (isPending) return <GameLayout status={"Загрузка..."} />;
+  let game = await getGameById(gameId);
 
-  if (!game) return <div>Игра не найдена</div>;
+  if (!game) {
+    redirect("/");
+  }
 
-  return (
-    <GameLayout
-      players={<GamePlayers game={game} />}
-      status={<GameStatus game={game} />}
-      field={<GameField game={game} />}
-    />
-  );
+  if (user) {
+    const startGameResult = await startGame(gameId, user);
+
+    if (startGameResult?.type === "right") {
+      game = startGameResult.value;
+      gameEvents.emit(startGameResult.value);
+    }
+  }
+
+  return <GameClient defaultGame={game} />;
 }
