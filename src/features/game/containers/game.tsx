@@ -1,29 +1,19 @@
+"use client";
+
 import { GameId } from "@/kernel/ids";
+import { useGame } from "../model/use-game";
+import { GameField } from "../ui/field";
 import { GameLayout } from "../ui/layout";
 import { GamePlayers } from "../ui/players";
-import { GameEntity } from "@/entities/game";
 import { GameStatus } from "../ui/status";
-import { GameField } from "../ui/field";
 
 export function Game({ gameId }: { gameId: GameId }) {
-  const game: GameEntity = {
-    id: "1",
-    players: [
-      {
-        id: "1",
-        login: "someone",
-        rating: 1000,
-      },
-      {
-        id: "1",
-        login: "someone",
-        rating: 1000,
-      },
-    ],
-    // winner: ,
-    status: "gameOver",
-    field: [null, null, null, "O", "X", null, null, null, null],
-  };
+  const { game, isPending } = useGame(gameId);
+
+  if (isPending) return <GameLayout status={"Загрузка..."} />;
+
+  if (!game) return <div>Игра не найдена</div>;
+
   return (
     <GameLayout
       players={<GamePlayers game={game} />}
