@@ -8,13 +8,13 @@ import { GamePlayers } from "../ui/players";
 import { GameStatus } from "../ui/status";
 
 export function GameClient({ defaultGame }: { defaultGame: GameEntity }) {
-  const { game = defaultGame } = useGame(defaultGame.id);
+  const { game = defaultGame, step } = useGame(defaultGame.id);
 
   return (
     <GameLayout
       players={<GamePlayers game={game} />}
       status={<GameStatus game={game} />}
-      field={<GameField game={game} />}
+      field={<GameField game={game} onCellClick={step} />}
     />
   );
 }

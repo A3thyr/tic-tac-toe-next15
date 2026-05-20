@@ -9,4 +9,4 @@ export type {
   GameOverEntity,
   GameSymbolS,
 } from "./domain";
-export { getGameCurrentStep, getNextSymbol, GameSymbol } from "./domain";
+export { getGameCurrentSymbol, GameSymbol } from "./domain";
