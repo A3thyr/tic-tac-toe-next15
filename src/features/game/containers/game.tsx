@@ -1,9 +1,8 @@
-import { GameId } from "@/kernel/ids";
-import { GameClient } from "./game-client";
-import { getCurrentUser } from "@/entities/user/server";
 import { getGameById, startGame } from "@/entities/game/server";
-import { gameEvents } from "../services/game-events";
+import { getCurrentUser } from "@/entities/user/server";
+import { GameId } from "@/kernel/ids";
 import { redirect } from "next/navigation";
+import { GameClient } from "./game-client";
 
 export async function Game({ gameId }: { gameId: GameId }) {
   const user = await getCurrentUser();
@@ -19,7 +18,6 @@ export async function Game({ gameId }: { gameId: GameId }) {
 
     if (startGameResult?.type === "right") {
       game = startGameResult.value;
-      gameEvents.emit(startGameResult.value);
     }
   }
 
