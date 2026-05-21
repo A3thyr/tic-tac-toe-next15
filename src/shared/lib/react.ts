@@ -20,9 +20,9 @@ export function useActionState<State, InitialState, Payload>(
 ];
 
 export function useActionState(
-  action: any,
-  initialState: any,
-  permalink?: string,
+  action: Parameters<typeof useActionStateReact>[0],
+  initialState: Parameters<typeof useActionStateReact>[1],
+  permalink?: Parameters<typeof useActionStateReact>[2],
 ) {
   return useActionStateReact(action, initialState, permalink);
 }
