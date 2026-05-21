@@ -1,8 +1,8 @@
-import amqplib, { Connection } from "amqplib";
+import amqplib, { ChannelModel } from "amqplib";
 
 const RABBITMQ_FRAME_MAX = 8192;
 
-let connection: Connection | undefined = undefined;
+let connection: ChannelModel | undefined = undefined;
 
 function rabbitMqConnectUrl() {
   const url = process.env.MB_URL!;
