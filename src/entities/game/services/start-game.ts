@@ -2,7 +2,6 @@ import { GameId } from "@/kernel/ids";
 import { PlayerEntity } from "../domain";
 import { gameRepository } from "../repositories/game";
 import { left, right } from "@/shared/lib/either";
-import { gameEvents } from "./game-events";
 
 export async function startGame(gameId: GameId, player: PlayerEntity) {
   const game = await gameRepository.getGame({
@@ -17,11 +16,6 @@ export async function startGame(gameId: GameId, player: PlayerEntity) {
     return left("game-creator-cannot-start-game" as const);
 
   const newGame = await gameRepository.startGame(gameId, player);
-
-  await gameEvents.emit({
-    type: "game-changed",
-    data: newGame,
-  });
 
   return right(newGame);
 }

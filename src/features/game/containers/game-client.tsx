@@ -14,7 +14,7 @@ export function GameClient({
   defaultGame: GameEntity;
   player: PlayerEntity;
 }) {
-  const { game = defaultGame, step } = useGame(defaultGame.id, player);
+  const { game = defaultGame, step } = useGame(defaultGame.id, player, defaultGame);
 
   return (
     <GameLayout

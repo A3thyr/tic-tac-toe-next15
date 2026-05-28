@@ -28,19 +28,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      rabbitmq:
-        image: rabbitmq:4
-        ports:
-          - 5672:5672
-        options: >-
-          --health-cmd "rabbitmq-diagnostics -q ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres?schema=public
-      MB_URL: amqp://localhost:5672
       SESSION_SECRET: ci-session-secret-must-be-at-least-32-chars
 
     steps:

@@ -1,8 +1,11 @@
-import { gameEvents, getGameById, surrenderGame } from "@/entities/game/server";
+import { getGameById, surrenderGame } from "@/entities/game/server";
 import { GameId } from "@/kernel/ids";
 import { sseStream } from "@/shared/lib/sse/server";
 import { NextRequest } from "next/server";
 import { getCurrentUser } from "@/entities/user/server";
+import { sleep } from "@/shared/lib/sleep";
+
+const POLL_INTERVAL_MS = 250;
 
 export async function getGameStream(
   req: NextRequest,
@@ -22,15 +25,32 @@ export async function getGameStream(
 
   write(game);
 
-  const unwatch = await gameEvents.addGameChangedListener(game.id, (event) => {
-    write(event.data);
-  });
-
   try {
-    addCloseListener(async () => {
-      await surrenderGame(game.id, user);
+    let prevSerializedGame = JSON.stringify(game);
 
-      unwatch();
+    (async () => {
+      while (!req.signal.aborted) {
+        await sleep(POLL_INTERVAL_MS);
+
+        if (req.signal.aborted) break;
+
+        const nextGame = await getGameById(game.id);
+        if (!nextGame) continue;
+
+        const nextSerializedGame = JSON.stringify(nextGame);
+
+        if (nextSerializedGame === prevSerializedGame) continue;
+
+        prevSerializedGame = nextSerializedGame;
+        write(nextGame);
+      }
+    })().catch((error) => {
+      console.error("Failed while polling game stream", error);
+      close();
+    });
+
+    addCloseListener(() => {
+      surrenderGame(game.id, user);
     });
   } catch (error) {
     console.error("Failed to subscribe to game events", error);

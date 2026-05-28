@@ -2,7 +2,6 @@ import { GameId } from "@/kernel/ids";
 import { PlayerEntity } from "../domain";
 import { gameRepository } from "../repositories/game";
 import { left, right } from "@/shared/lib/either";
-import { gameEvents } from "./game-events";
 
 export async function surrenderGame(gameId: GameId, player: PlayerEntity) {
   const game = await gameRepository.getGame({
@@ -21,11 +20,6 @@ export async function surrenderGame(gameId: GameId, player: PlayerEntity) {
     ...game,
     status: "gameOver",
     winner: game.players.find((p) => p.id !== player.id)!,
-  });
-
-  await gameEvents.emit({
-    type: "game-changed",
-    data: newGame,
   });
 
   return right(newGame);
